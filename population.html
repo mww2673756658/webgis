@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>GeoJSONLayer - 4.11</title>
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.11/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.11/"></script>
+
+    <script>
+      require([
+        "esri/Map",
+        "esri/layers/GeoJSONLayer",
+        "esri/views/MapView",
+		"esri/widgets/Legend"
+      ], function(Map, GeoJSONLayer, MapView,Legend) {
+        // If GeoJSON files are not on the same domain as your website, a CORS enabled server
+        // or a proxy is required.
+        const url =
+          "https://mww2673756658.github.io/webgis/chinawgs84.json";
+
+        const label1 = {
+          type: "simple-fill", // autocasts as new SimpleFillSymbol()
+          color: "#FFEFD5",
+          style: "solid",
+          outline: {
+            width: 0.2,
+            color: [255, 255, 255, 0.5]
+          }
+        };
+
+        const label2 = {
+          type: "simple-fill", // autocasts as new SimpleFillSymbol()
+          color: "#FFDEAD",
+          style: "solid",
+          outline: {
+            width: 0.2,
+            color: [255, 255, 255, 0.5]
+          }
+        };
+
+        const label3 = {
+          type: "simple-fill", // autocasts as new SimpleFillSymbol()
+          color: "#FFA07A",
+          style: "solid",
+          outline: {
+            width: 0.2,
+            color: [255, 255, 255, 0.5]
+          }
+        };
+
+        const label4 = {
+          type: "simple-fill", // autocasts as new SimpleFillSymbol()
+          color: "#FF7F50",
+          style: "solid",
+          outline: {
+            width: 0.2,
+            color: [255, 255, 255, 0.5]
+          }
+        };
+		
+		const label5 = {
+          type: "simple-fill", // autocasts as new SimpleFillSymbol()
+          color: "#FF4500",
+          style: "solid",
+          outline: {
+            width: 0.2,
+            color: [255, 255, 255, 0.5]
+          }
+        };
+		
+		
+		const renderer = {
+          type: "class-breaks", // autocasts as new ClassBreaksRenderer()
+          field: "pop2010",
+          legendOptions: {
+            title: "2010中国各省人口数（百万）"
+          },
+          classBreakInfos: [
+            {
+              minValue: 0,
+              maxValue: 19999999,
+              symbol: label1,
+              label: "< 20"
+            },
+            {
+              minValue: 20000000,
+              maxValue: 39999999,
+              symbol: label2,
+              label: "20 - 40"
+            },
+            {
+              minValue: 40000000,
+              maxValue: 59999999,
+              symbol: label3,
+              label: "40 - 60"
+            },
+            {
+              minValue: 60000000,
+              maxValue: 79999999,
+              symbol: label4,
+              label: "60 - 80"
+            },
+			{
+              minValue: 80000000,
+              maxValue: 104303132,
+              symbol: label5,
+              label: "> 80"
+            }
+          ]
+        };
+
+        const geojsonLayer = new GeoJSONLayer({
+          url: url,
+		  title:"population2010",
+		  renderer:renderer
+        });
+
+        const map = new Map({
+          basemap: "gray",
+          layers: [geojsonLayer]
+        });
+
+        const view = new MapView({
+          container: "viewDiv",
+          center: [97, 36],
+          zoom: 4,
+          map: map
+        });
+		
+		view.ui.add(
+          new Legend({
+            view: view
+          }),
+          "bottom-left"
+        );
+		
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>
